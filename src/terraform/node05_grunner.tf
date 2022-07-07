@@ -20,7 +20,7 @@ resource "yandex_compute_instance" "grunner" {
 
   network_interface {
     subnet_id  = "${yandex_vpc_subnet.default.id}"
-    nat        = true
+#    nat        = true
     ip_address = "192.168.101.15"
   }
 

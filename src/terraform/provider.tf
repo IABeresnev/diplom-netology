@@ -5,6 +5,22 @@ terraform {
       source = "yandex-cloud/yandex"
     }
   }
+
+backend "s3" {
+    bucket = "diplom-bucket"
+    key = "terraform.tfstate"
+
+    endpoint = "http://192.168.0.29:9000"
+
+    access_key="TQBJdFEuvsxIgYWU"
+    secret_key="3bQKav9eDbUuHOrcFklx70LhfyQiN0MQ"
+
+    region = "main"
+    skip_credentials_validation = true
+    skip_metadata_api_check = true
+    skip_region_validation = true
+    force_path_style = true
+  }
 }
 
 provider "yandex" {
