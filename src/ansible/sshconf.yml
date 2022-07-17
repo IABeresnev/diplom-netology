@@ -1,0 +1,12 @@
+---
+- hosts: reverseproxy
+  become: true
+
+  tasks:
+  - name: Copy config file
+    ansible.builtin.copy:
+      src: /home/yolo/.ssh/id_rsa
+      dest: /home/centos/.ssh/id_rsa
+      owner: centos
+      group: centos
+      mode: '0600'

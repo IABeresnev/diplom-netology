@@ -19,7 +19,7 @@ resource "yandex_compute_instance" "rproxy" {
   }
 
   network_interface {
-    subnet_id  = "${yandex_vpc_subnet.default.id}"
+    subnet_id  = "${yandex_vpc_subnet.lan-subnet-a.id}"
     nat        = true
     ip_address = "192.168.101.11"
   }

@@ -1,0 +1,7 @@
+--- 
+- name: first task
+  hosts: reversproxy
+  roles: 
+    -  install-privoxy
+    -  { role: install-nginx-revproxy, become: yes }
+

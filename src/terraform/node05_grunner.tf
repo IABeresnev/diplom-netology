@@ -1,12 +1,12 @@
 resource "yandex_compute_instance" "grunner" {
   name                      = "grunner"
-  zone                      = "ru-central1-a"
+  zone                      = "ru-central1-b"
   hostname                  = "grunner.itili4.ru"
   allow_stopping_for_update = true
 
   resources {
-    cores  = 4
-    memory = 8
+    cores  = 2
+    memory = 2
   }
 
   boot_disk {
@@ -19,9 +19,9 @@ resource "yandex_compute_instance" "grunner" {
   }
 
   network_interface {
-    subnet_id  = "${yandex_vpc_subnet.default.id}"
+    subnet_id  = "${yandex_vpc_subnet.lan-subnet-b.id}"
 #    nat        = true
-    ip_address = "192.168.101.15"
+    ip_address = "192.168.102.15"
   }
 
   metadata = {

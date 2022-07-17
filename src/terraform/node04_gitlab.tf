@@ -1,12 +1,12 @@
 resource "yandex_compute_instance" "gitlab" {
   name                      = "gitlab"
-  zone                      = "ru-central1-a"
+  zone                      = "ru-central1-b"
   hostname                  = "gitlab.itili4.ru"
   allow_stopping_for_update = true
 
   resources {
     cores  = 4
-    memory = 8
+    memory = 4
   }
 
   boot_disk {
@@ -19,9 +19,9 @@ resource "yandex_compute_instance" "gitlab" {
   }
 
   network_interface {
-    subnet_id  = "${yandex_vpc_subnet.default.id}"
+    subnet_id  = "${yandex_vpc_subnet.lan-subnet-b.id}"
 #    nat        = true
-    ip_address = "192.168.101.14"
+    ip_address = "192.168.102.14"
   }
 
   metadata = {

@@ -1,0 +1,28 @@
+---
+# tasks file for install-privoxy
+- name: Add epel-release repo
+  become: true
+  yum:
+    name: epel-release
+    state: present
+
+- name: Install privoxy
+  become: true
+  yum:
+    name: privoxy
+    state: present
+
+- name: Copy config file
+  become: true
+  template:
+    src: config.j2
+    dest: /etc/privoxy/config
+    owner: centos
+    group: centos
+    mode: '0644'
+
+- name: Start privoxy
+  become: true
+  service:
+    name: privoxy
+    state: started

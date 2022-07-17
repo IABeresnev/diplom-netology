@@ -1,0 +1,81 @@
+---
+- name: Install nginx
+  hosts: nodes
+  become: true
+
+  tasks:
+  - name: Add epel-release repo
+    yum:
+      name: epel-release
+      state: present
+    environment:
+        http_proxy: http://192.168.101.11:8118
+        https_proxy: http://192.168.101.11:8118
+
+  - name: Install nginx
+    yum:
+      name: nginx
+      state: present
+    environment:
+        http_proxy: http://192.168.101.11:8118
+        https_proxy: http://192.168.101.11:8118
+
+  - name: Set up nginx directories
+    file:
+      path: "/etc/nginx/{{ item }}"
+      state: directory
+      owner: root
+      group: root
+      mode: 0640
+    with_items:
+      - sites-available
+      - sites-enabled
+
+  - name: Add Site Config
+    template:
+      src: reverseproxy.conf.j2
+      dest: /etc/nginx/sites-available/{{ item.key }}.conf
+      owner: root
+      group: root
+      mode: 0640
+    with_dict: "{{ nginx_revproxy_sites }}"
+
+  - name: Add Https Site Config
+    template:
+      src: reverseproxy_ssl.conf.j2
+      dest: /etc/nginx/sites-available/{{ item.key }}.conf
+      owner: root
+      group: root
+      mode: 0640
+    with_dict: "{{ nginx_revproxy_sites }}"  
+
+  - name: Enable Site Config
+    file:
+      src: /etc/nginx/sites-available/{{ item.key }}.conf
+      dest: /etc/nginx/sites-enabled/{{ item.key }}
+      state: link
+    with_dict: "{{ nginx_revproxy_sites }}"
+
+  - name: Create WebRoot sites
+    file:
+      dest: /var/www/{{ item.key }}/.well-known
+      mode: 0775
+      state: directory
+      owner: www-data
+      group: www-data
+    with_dict: "{{ nginx_revproxy_sites }}"
+
+  - name: WebRoot Permissions Sites
+    file:
+      dest: /var/www/{{ item.key }}
+      mode: 0775
+      state: directory
+      owner: www-data
+      group: www-data
+      recurse: true
+    with_dict: "{{ nginx_revproxy_sites }}"
+
+  - name: Start NGiNX
+    service:
+      name: nginx
+      state: started

@@ -1,0 +1,7 @@
+- name: Test Ping
+  hosts: nodes
+  tasks:
+  - action: ping
+    environment:
+        http_proxy: http://192.168.101.11:8118
+        https_proxy: http://192.168.101.11:8118

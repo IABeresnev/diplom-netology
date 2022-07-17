@@ -6,6 +6,10 @@ output "external_ip_address_rproxy" {
   value = "${yandex_compute_instance.rproxy.network_interface.0.nat_ip_address}"
 }
 
+output "internal_ip_address_wordpress" {
+  value = "${yandex_compute_instance.wordpress.network_interface.0.ip_address}"
+}
+
 output "internal_ip_address_db01" {
   value = "${yandex_compute_instance.db01.network_interface.0.ip_address}"
 }
