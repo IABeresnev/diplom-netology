@@ -1,0 +1,13 @@
+# Replication settings (replication is only enabled if master/user have values).
+mysql_server_id: "1"
+mysql_max_binlog_size: "100M"
+mysql_binlog_format: "ROW"
+mysql_expire_logs_days: "10"
+mysql_replication_role: master
+mysql_replication_master: "{{ groups['dbservers'][0] }}"
+# Same keys as `mysql_users` above.
+mysql_replication_user:
+  { 
+     name: replicationuser, 
+     password: replicationuser, 
+  }
