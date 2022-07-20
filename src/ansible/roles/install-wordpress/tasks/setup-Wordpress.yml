@@ -1,0 +1,8 @@
+---
+  - name: Add Sample Page
+    copy:
+      src: index.html
+      dest: /var/www/wordpress.itili4.ru/public_html/index.html
+      owner: apache
+      group: apache
+      mode: 0775

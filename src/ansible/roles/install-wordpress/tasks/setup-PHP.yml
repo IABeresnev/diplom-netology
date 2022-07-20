@@ -1,0 +1,16 @@
+---
+- name: Ensure PHP packages is installed.
+  yum:
+    name: '{{ item }}'
+    state: present
+    update_cache: true
+  loop:
+    - php
+    - php-mysql
+ #   - php-mysqlnd
+    - php-pear
+    - php-mbstring 
+    - php-mcrypt 
+    - php-devel 
+    - php-xml 
+    - php-gd

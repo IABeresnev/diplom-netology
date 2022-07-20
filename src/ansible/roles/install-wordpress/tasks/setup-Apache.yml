@@ -1,0 +1,16 @@
+---
+- name: Add epel-release repo
+  yum:
+    name: epel-release
+    state: present
+
+- name: Ensure Httpd package is installed.
+  yum:
+    name: httpd
+    state: present
+
+- name: Start httpd
+  service:
+    name: httpd
+    state: started
+

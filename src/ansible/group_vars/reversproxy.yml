@@ -57,6 +57,17 @@ nginx_revproxy_sites:                                         # List of sites to
     hsts_max_age: 63072000                                    # Set HSTS header with max-age defined
     letsencrypt: true                                        # Set to True if you want use letsencrypt
     letsencrypt_email: "beresnevia.it@gmail.com"
+  wordpress.itili4.ru:                                                # Domain name
+    client_max_body_size: "256M"
+    proxy_read_timeout: "360"
+    domains:                                                  # List of server_name aliases
+      - wordpress.itili4.ru
+    upstreams:                                                # List of Upstreams
+      - {backend_address: wordpress.itili4.ru, backend_port: 80}
+    ssl: true                                                 # Set to True if you want to redirect http to https
+    hsts_max_age: 63072000                                    # Set HSTS header with max-age defined
+    letsencrypt: true                                        # Set to True if you want use letsencrypt
+    letsencrypt_email: "beresnevia.it@gmail.com"
   
 
 nginx_revproxy_certbot_auto: false

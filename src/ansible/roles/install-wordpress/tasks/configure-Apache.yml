@@ -1,0 +1,67 @@
+---
+  - name: Set up httpd directories
+    file:
+      path: "/etc/httpd/{{ item }}"
+      state: directory
+      owner: root
+      group: root
+      mode: 0640
+    with_items:
+      - sites-available
+      - sites-enabled
+  
+  - name: Add Site Config
+    copy:
+      src: wordpress.itili4.ru.conf
+      dest: /etc/httpd/sites-available/wordpress.itili4.ru.conf
+      owner: root
+      group: root
+      mode: 0640
+  
+  - name: Enable Site Config
+    file:
+      src: /etc/httpd/sites-available/wordpress.itili4.ru.conf
+      dest: /etc/httpd/sites-enabled/wordpress.itili4.ru.conf
+      state: link
+
+
+  - name: Create WebRoot sites
+    file:
+      dest: /var/www/wordpress.itili4.ru/public_html
+      mode: 0775
+      state: directory
+      owner: apache
+      group: apache
+
+  - name: Create WebRoot sites logs
+    file:
+      dest: /var/www/wordpress.itili4.ru/logs
+      mode: 0775
+      state: directory
+      owner: apache
+      group: apache
+  
+  - name: Create sites log files
+    file:
+      dest: /var/www/wordpress.itili4.ru/logs/{{ item }}.log
+      mode: 0775
+      state: touch
+      owner: apache
+      group: apache
+    loop:
+      - { error }
+      - { access }
+ 
+  - name: WebRoot Permissions Sites
+    file:
+      dest: /var/www/wordpress
+      mode: 0775
+      state: directory
+      owner: apache
+      group: apache
+      recurse: true
+  
+  - name: Reload Apache
+    service:
+      name: httpd
+      state: reloaded

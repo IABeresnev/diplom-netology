@@ -1,0 +1,8 @@
+---
+# tasks file for install-wordpress
+- include_tasks: setup-Apache.yml
+- include_tasks: setup-PHP.yml
+- include_tasks: configure-PHP.yml
+- include_tasks: configure-Apache.yml
+- include_tasks: setup-Wordpress.yml
+- include_tasks: configure-Wordpress.yml
