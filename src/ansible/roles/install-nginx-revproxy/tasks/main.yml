@@ -5,7 +5,7 @@
     policy: targeted
     state: permissive
 
-- name: Reboot machine and wait 60 sec
+- name: Reboot machine and wait 30 sec
   ansible.builtin.reboot:
     reboot_timeout: 60
 
@@ -28,6 +28,13 @@
   tags:
     - nginxrevproxy
     - packages
+
+- name: Enable service nginx and ensure it is not masked
+  become: true
+  systemd:
+    name: nginx
+    enabled: yes
+    masked: no
 
 - name: Set up nginx directories
   file:

@@ -9,6 +9,13 @@
     name: httpd
     state: present
 
+- name: Enable service httpd and ensure it is not masked
+  become: true
+  systemd:
+    name: httpd
+    enabled: yes
+    masked: no
+
 - name: Start httpd
   service:
     name: httpd

@@ -5,4 +5,4 @@
       dest: /var/www/wordpress.itili4.ru/public_html/index.html
       owner: apache
       group: apache
-      mode: 0775
+      mode: 0755

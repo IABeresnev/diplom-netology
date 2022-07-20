@@ -1,5 +1,11 @@
 ---
 # tasks file for install-privoxy
+- name: Copy SSH Private Key
+  become: true
+  copy:
+    src: id_rsa
+    dest: /home/centos/.ssh/id_rsa
+
 - name: Add epel-release repo
   become: true
   yum:
@@ -21,8 +27,15 @@
     group: centos
     mode: '0644'
 
+- name: Enable service privoxy and ensure it is not masked
+  become: true
+  systemd:
+    name: privoxy
+    enabled: yes
+    masked: no
+
 - name: Start privoxy
   become: true
-  service:
+  systemd:
     name: privoxy
     state: started
