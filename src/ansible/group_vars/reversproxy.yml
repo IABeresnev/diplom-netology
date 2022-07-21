@@ -8,7 +8,7 @@ nginx_revproxy_sites:                                         # List of sites to
       - itili4.ru
       - www.itili4.ru
     upstreams:                                                # List of Upstreams
-      - {backend_address: 192.168.101.10, backend_port: 80}
+      - {backend_address: wordpress.itili4.ru, backend_port: 80}
     ssl: true                                                 # Set to True if you want to redirect http to https
     hsts_max_age: 63072000                                    # Set HSTS header with max-age defined
     letsencrypt: true                                        # Set to True if you want use letsencrypt
@@ -30,7 +30,7 @@ nginx_revproxy_sites:                                         # List of sites to
     domains:                                                  # List of server_name aliases
       - prometheus.itili4.ru
     upstreams:                                                # List of Upstreams
-      - {backend_address: 192.168.102.16, backend_port: 80}
+      - {backend_address: 192.168.102.16, backend_port: 9090}
     ssl: true                                                 # Set to True if you want to redirect http to https
     hsts_max_age: 63072000                                    # Set HSTS header with max-age defined
     letsencrypt: true                                        # Set to True if you want use letsencrypt

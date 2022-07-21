@@ -9,7 +9,7 @@ runnerservers
 gpaservers
 
 [reversproxy]
-rproxy.itili4.ru ansible_host=51.250.10.206
+rproxy.itili4.ru ansible_host=51.250.89.142
 [frontend]
 wordpress.itili4.ru ansible_host=192.168.101.10
 [dbservers]
@@ -23,7 +23,7 @@ grunner.itili4.ru ansible_host=192.168.102.15
 gpa.itili4.ru ansible_host=192.168.102.16
 
 [nodes:vars]
-ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -W %h:%p -q centos@51.250.10.206"'
+ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -W %h:%p -q centos@51.250.89.142"'
 ansible_ssh_user=centos
   
 [reversproxy:vars]
