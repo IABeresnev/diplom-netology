@@ -4,14 +4,13 @@
   roles: 
     -  install-privoxy
     -  { role: install-nginx-revproxy, become: yes }
-
-#- name: Install MySQL Cluster
-#  hosts: dbservers
-#  roles:  
-    #-  { role: install-mysql, become: yes }
-#  environment:
-#        http_proxy: http://192.168.101.11:8118
-#        https_proxy: http://192.168.101.11:8118
+- name: Install MySQL Cluster
+  hosts: dbservers
+  roles:  
+   -  { role: install-mysql, become: yes }
+  environment:
+        http_proxy: http://192.168.101.11:8118
+        https_proxy: http://192.168.101.11:8118
 
 - name: Setup Application server
   hosts: frontend

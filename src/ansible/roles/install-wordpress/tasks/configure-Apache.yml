@@ -78,14 +78,14 @@
   - name: Apply new SELinux file context to filesystem wordpress.itili4.ru/public_html
     ansible.builtin.command: restorecon -irv /var/www/wordpress.itili4.ru/public_html
 
-  - name: Allow apache to wright log files in wordpress.itili4.ru/logs
-    community.general.sefcontext:
-      target: '/var/www/wordpress.itili4.ru/logs(/.*)?'
-      setype: httpd_log_t
-      state: present
+  - name: Apply new SELinux file context to filesystem wordpress.itili4.ru/logs
+    ansible.builtin.command: semanage fcontext -a -t httpd_log_t "/var/www/wordpress.itili4.ru/logs(/.*)?"
+
+  - name: Allow webserver to connect to remote database through SELinux
+    ansible.builtin.command: setsebool -P httpd_can_network_connect_db 1
 
   - name: Apply new SELinux file context to filesystem wordpress.itili4.ru/logs
-    ansible.builtin.command: restorecon -Rr /var/www/wordpress.itili4.ru/logs
+    ansible.builtin.command: restorecon -Rv /var/www/wordpress.itili4.ru/logs
 
   - name: Ensure Apache is running
     service:

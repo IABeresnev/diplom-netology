@@ -95,10 +95,17 @@ server {
 {% if item.value.conn_upgrade is not defined or item.value.conn_upgrade %}
       proxy_set_header Connection "upgrade";
 {% endif %}
-      proxy_set_header Host $http_host;
+      proxy_http_version 1.1;
+      proxy_buffering off;
+      proxy_connect_timeout 90;
+      proxy_redirect        off;
+      proxy_set_header Host $host;
+      proxy_set_header Upgrade $http_upgrade;
       proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-Proto https;
       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-      proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_set_header X-Forwarded-Port 443;
+      proxy_set_header Proxy "";
       proxy_set_header X-Frame-Options SAMEORIGIN;
       proxy_pass {{ item.value.backend_protocol | default('http') }}://{{ item.key }}_backend;
 {% if item.value.auth is defined %}
