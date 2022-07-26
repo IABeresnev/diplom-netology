@@ -1,0 +1,30 @@
+---
+# General config.
+gitlab_domain: gitlab.itili4.ru
+gitlab_external_url: "http://{{ gitlab_domain }}/"
+gitlab_git_data_dir: "/var/opt/gitlab/git-data"
+gitlab_edition: "gitlab-ce"
+gitlab_version: ''
+gitlab_backup_path: "/var/opt/gitlab/backups"
+gitlab_config_template: "gitlab.rb.j2"
+
+# Probably best to leave this as the default, unless doing testing.
+gitlab_restart_handler_failed_when: 'gitlab_restart.rc != 0'
+
+# Dependencies.
+gitlab_dependencies:
+  - openssh-server
+  - postfix
+  - curl
+  - openssl
+  - tzdata
+
+# Optional settings.
+gitlab_time_zone: "UTC"
+gitlab_backup_keep_time: "604800"
+gitlab_download_validate_certs: true
+gitlab_default_theme: '2'
+gitlab_initial_root_paswd: "6iLv81783GM"
+gitlab_token_for_runners: "6iLv81783GMRBHNw3f5-"
+
+#export GIT_SSL_NO_VERIFY=1

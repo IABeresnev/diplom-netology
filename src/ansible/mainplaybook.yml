@@ -3,31 +3,51 @@
   hosts: reversproxy
   roles: 
 #    -  { role: install-node-exporter, become: yes }
-#    -  install-privoxy
-#    -  { role: install-nginx-revproxy, become: yes }
-#- name: Install MySQL Cluster
-#  hosts: dbservers
-#  roles: 
+    -  install-privoxy
+    -  { role: install-nginx-revproxy, become: yes }
+- name: Install MySQL Cluster
+  hosts: dbservers
+  roles: 
 #   -  { role: install-node-exporter, become: yes } 
-#   -  { role: install-mysql, become: yes }
-#  environment:
-#        http_proxy: http://192.168.101.11:8118
-#        https_proxy: http://192.168.101.11:8118
+   -  { role: install-mysql, become: yes }
+  environment:
+        http_proxy: http://192.168.101.11:8118
+        https_proxy: http://192.168.101.11:8118
+
+- name: Setup Application server
+  hosts: frontend
+  roles:
+##    - { role: install-node-exporter, become: yes }
+    - { role: install-wordpress, become: yes }
+  environment:
+        http_proxy: http://192.168.101.11:8118
+        https_proxy: http://192.168.101.11:8118
 #
-#- name: Setup Application server
-#  hosts: frontend
+#- name: Setup Monitoring server
+#  hosts: gpaservers
 #  roles:
 #    - { role: install-node-exporter, become: yes }
-#    - { role: install-wordpress, become: yes }
+#    - { role: install-prometheus, become: yes }
+#    - { role: install-grafana, become: yes }
+#    - { role: install-alertmanager, become: yes }
 #  environment:
 #        http_proxy: http://192.168.101.11:8118
 #        https_proxy: http://192.168.101.11:8118
-#
-- name: Setup Monitoring server
-  hosts: gpaservers
+
+- name: Setup Gitlab server
+  hosts: glservers
   roles:
-    - { role: install-node-exporter, become: yes }
-    - { role: install-prometheus, become: yes }
+#    - { role: install-node-exporter, become: yes }
+    - { role: install-gitlab, become: yes }
+  environment:
+        http_proxy: http://192.168.101.11:8118
+        https_proxy: http://192.168.101.11:8118
+
+- name: Setup Gitlab-runner server
+  hosts: runnerservers
+  roles:
+#    - { role: install-node-exporter, become: yes }
+    - { role: install-grunner, become: yes }
   environment:
         http_proxy: http://192.168.101.11:8118
         https_proxy: http://192.168.101.11:8118

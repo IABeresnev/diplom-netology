@@ -1,0 +1,31 @@
+---
+- include_tasks: preflight.yml
+  tags:
+    - alertmanager_install
+    - alertmanager_configure
+    - alertmanager_run
+
+- include_tasks: install.yml
+  tags:
+    - alertmanager_install
+
+- include_tasks: selinux.yml
+  when: ansible_selinux.status == "enabled"
+  tags:
+    - alertmanager_configure
+
+- include_tasks: configure.yml
+  tags:
+    - alertmanager_configure
+
+- name: ensure alertmanager service is started and enabled
+  systemd:
+    daemon_reload: true
+    name: alertmanager
+    state: started
+    enabled: true
+  tags:
+    - alertmanager_run
+
+- name: Flush alertmangaer handlers after run.
+  meta: flush_handlers

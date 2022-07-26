@@ -19,7 +19,7 @@ nginx_revproxy_sites:                                         # List of sites to
     domains:                                                  # List of server_name aliases
       - grafana.itili4.ru
     upstreams:                                                # List of Upstreams
-      - {backend_address: 192.168.102.16, backend_port: 80}
+      - {backend_address: 192.168.102.16, backend_port: 3000}
     ssl: true                                                 # Set to True if you want to redirect http to https
     hsts_max_age: 63072000                                    # Set HSTS header with max-age defined
     letsencrypt: true                                        # Set to True if you want use letsencrypt
@@ -41,7 +41,7 @@ nginx_revproxy_sites:                                         # List of sites to
     domains:                                                  # List of server_name aliases
       - alertmanager.itili4.ru
     upstreams:                                                # List of Upstreams
-      - {backend_address: 192.168.102.16, backend_port: 80}
+      - {backend_address: 192.168.102.16, backend_port: 9093}
     ssl: true                                                 # Set to True if you want to redirect http to https
     hsts_max_age: 63072000                                    # Set HSTS header with max-age defined
     letsencrypt: true                                        # Set to True if you want use letsencrypt

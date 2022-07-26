@@ -1,0 +1,78 @@
+prometheus_version: latest
+prometheus_web_external_url: 'http://prometheus.itili4.ru:9090'
+prometheus_targets: 
+  node:
+    - targets:
+        - 192.168.101.11:9100
+      labels:
+        env: Proxy
+    - targets:
+        - 192.168.101.10:9100
+      labels:
+        env: Frontend
+    - targets:
+        - 192.168.101.12:9100
+        - 192.168.101.13:9100
+      labels:
+        env: DB Servers
+    - targets:
+        - 192.168.102.14:9100
+      labels:
+        env: GitlabServer
+    - targets:
+        - 192.168.102.15:9100
+      labels:
+        env: GitlabRunner
+#prometheus_alertmanager_config:
+#     static_configs:
+#       - targets: ["127.0.0.1:9093"]
+
+grafana_security:
+  admin_user: admin
+  admin_password: "admin"
+#grafana_dashboards: 
+#  - dashboard_id: '13191' # WordPress dashboard
+#    revision_id: '1'
+#    datasource: 'Prometheus' # Change DataSource to MySQL with WP-Statics Plugin
+#  - dashboard_id: '7362'   # MySQL Percona Dashboard
+#    revision_id: '5'
+#    datasource: 'Prometheus'
+#  - dashboard_id: '1860'  # NodeExporter Dashboard
+#    revision_id: '27'
+#    datasource: 'Prometheus'
+
+#grafana_datasources: []
+#  - name: "Prometheus"
+#    type: "prometheus"
+#    access: "proxy"
+#    url: "http://prometheus.mydomain"
+#    basicAuth: true
+#    basicAuthUser: "admin"
+#    basicAuthPassword: "password"
+#    isDefault: true
+#    jsonData:
+#      tlsAuth: false
+#      tlsAuthWithCACert: false
+#      tlsSkipVerify: true
+grafana_datasources:
+  - name: prometheus
+    type: prometheus
+    access: proxy
+    url: 'http://192.168.102.16:9090'
+    basicAuth: false
+
+
+alertmanager_version: latest
+alertmanager_web_external_url: 'http://alertmanager.itili4.ru:9093/'
+alertmanager_slack_api_url: "http://example.com"
+alertmanager_receivers:
+  - name: slack
+    slack_configs:
+      - send_resolved: true
+        channel: '#alerts'
+alertmanager_route:
+      group_by: ['alertname', 'cluster', 'service']
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 3h
+      receiver: slack
