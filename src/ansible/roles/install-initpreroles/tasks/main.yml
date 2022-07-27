@@ -1,5 +1,5 @@
 ---
-#- name: Copy SSH Private Key
-#  copy:
-#    src: id_rsa
-#    dest: /home/gitlab-runner/.ssh/id_rsa
+- name: Copy SSH Private Key
+  copy:
+    src: id_rsa
+    dest: /home/centos/.ssh/id_rsa

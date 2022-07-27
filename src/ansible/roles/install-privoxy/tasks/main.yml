@@ -1,10 +1,4 @@
 ---
-# tasks file for install-privoxy
-- name: Copy SSH Private Key
-  copy:
-    src: id_rsa
-    dest: /home/centos/.ssh/id_rsa
-
 - name: Add epel-release repo
   yum:
     name: epel-release
