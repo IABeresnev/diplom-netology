@@ -1,0 +1,29 @@
+---
+# Переменные для установки
+- include_tasks: variables.yml
+
+# Установка только для RHEL-like систем
+- include_tasks: setup-RedHat.yml
+  when: ansible_os_family == 'RedHat'
+
+# Проверка на наличие установленных версий
+- name: Check if MySQL packages were installed.
+  set_fact:
+    mysql_install_packages: "{{ (rh_mysql_install_packages is defined and rh_mysql_install_packages.changed)
+      or (deb_mysql_install_packages is defined and deb_mysql_install_packages.changed)
+      or (arch_mysql_install_packages is defined and arch_mysql_install_packages.changed) }}"
+
+# Конфигурирование установленных компонентов
+- include_tasks: configure.yml
+# Настройка доступов и первинчая безопасность сервиса
+- include_tasks: secure-installation.yml
+# Создание баз данных
+- include_tasks: databases.yml
+# Создание пользователей
+- include_tasks: users.yml
+# Настройка и запуск репликации
+- include_tasks: replication.yml
+
+# Разрешаем подключения к сервису
+- name: Configure SELinux for incoming connections.
+  ansible.builtin.command: setsebool -P selinuxuser_mysql_connect_enabled 1

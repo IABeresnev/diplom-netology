@@ -1,5 +1,5 @@
 --- 
-- name: first task
+- name: Reverse proxy and internet gateway
   hosts: reversproxy
   roles: 
     -  { role: install-node-exporter, become: yes }
@@ -18,7 +18,7 @@
 - name: Setup Application server
   hosts: frontend
   roles:
-###    - { role: install-node-exporter, become: yes }
+#    - { role: install-node-exporter, become: yes }
 #    - { role: install-wordpress, become: yes }
     - { role: install-rsyncserver, become: yes }
   environment:

@@ -1,0 +1,88 @@
+---
+# Проверяем наличие установленных компонентов
+- name: Get MySQL version.
+  command: 'mysql --version'
+  register: mysql_cli_version
+  changed_when: false
+  check_mode: false
+# Копируем конфигурационный файл
+- name: Copy my.cnf global MySQL configuration.
+  template:
+    src: my.cnf.j2
+    dest: "{{ mysql_config_file }}"
+    owner: root
+    group: root
+    mode: 0644
+    force: "{{ overwrite_global_mycnf }}"
+  notify: restart mysql
+# Проверяем наличие директории для подключаемых конфигурационных файлов
+- name: Verify mysql include directory exists.
+  file:
+    path: "{{ mysql_config_include_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  when: mysql_config_include_files | length
+# Копируем дополнительный конфигурационный файл
+- name: Copy my.cnf override files into include directory.
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ mysql_config_include_dir }}/{{ item.src | basename }}"
+    owner: root
+    group: root
+    mode: 0644
+    force: "{{ item.force | default(False) }}"
+  with_items: "{{ mysql_config_include_files }}"
+  notify: restart mysql
+# Создаем лог для анализа медленных транзакций
+- name: Create slow query log file (if configured).
+  command: "touch {{ mysql_slow_query_log_file }}"
+  args:
+    creates: "{{ mysql_slow_query_log_file }}"
+    warn: false
+  when: mysql_slow_query_log_enabled
+# Создаем директорию для хранения файлов баз данных
+- name: Create datadir if it does not exist
+  file:
+    path: "{{ mysql_datadir }}"
+    state: directory
+    owner: mysql
+    group: mysql
+    mode: 0755
+    setype: mysqld_db_t
+# Настраиваем права на лог файл для медленных транзакций
+- name: Set ownership on slow query log file (if configured).
+  file:
+    path: "{{ mysql_slow_query_log_file }}"
+    state: file
+    owner: mysql
+    group: "{{ mysql_log_file_group }}"
+    mode: 0640
+  when: mysql_slow_query_log_enabled
+# Создаем лог файл для ошибок в работе.
+- name: Create error log file (if configured).
+  command: "touch {{ mysql_log_error }}"
+  args:
+    creates: "{{ mysql_log_error }}"
+    warn: false
+  when:
+    - mysql_log | default(true)
+    - mysql_log_error | default(false)
+  tags: ['skip_ansible_galaxy']
+# Настриваем права ня лог файл для ошибок.
+- name: Set ownership on error log file (if configured).
+  file:
+    path: "{{ mysql_log_error }}"
+    state: file
+    owner: mysql
+    group: "{{ mysql_log_file_group }}"
+    mode: 0640
+  when:
+    - mysql_log | default(true)
+    - mysql_log_error | default(false)
+  tags: ['skip_ansible_galaxy']
+# Провемяем что сервис MySQL настроен на автозапуск и запущен
+- name: Ensure MySQL is started and enabled on boot.
+  service: "name={{ mysql_daemon }} state=started enabled={{ mysql_enabled_on_startup }}"
+  register: mysql_service_configuration
