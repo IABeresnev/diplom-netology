@@ -1,0 +1,15 @@
+---
+rsync_server_timeout: 300
+rsync_server_max_connections: 10
+rsync_auth_user: "grunner"
+rsync_server_shares: 
+  - name: www
+    path: /var/www/wordpress.itili4.ru/public_html/
+    comment: "Target for grunner"
+    uid: apache
+    gid: apache
+    readonly: no
+
+
+rsync_server_logrotate_interval: weekly
+rsync_server_logrotate_backlog_size: 52

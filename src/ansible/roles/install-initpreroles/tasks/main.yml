@@ -1,2 +1,5 @@
 ---
-# tasks file for init-preroles
+#- name: Copy SSH Private Key
+#  copy:
+#    src: id_rsa
+#    dest: /home/gitlab-runner/.ssh/id_rsa

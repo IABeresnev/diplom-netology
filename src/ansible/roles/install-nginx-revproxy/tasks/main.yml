@@ -5,7 +5,7 @@
     policy: targeted
     state: permissive
 
-- name: Reboot machine and wait 30 sec
+- name: Reboot machine and wait 60 sec
   ansible.builtin.reboot:
     reboot_timeout: 60
 

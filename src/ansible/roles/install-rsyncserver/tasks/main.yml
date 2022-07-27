@@ -1,0 +1,12 @@
+---
+- name: Show facts available on the system
+  debug:
+    var: ansible_facts
+
+- name: Install client
+  include_tasks: client.yml
+  when: ansible_facts['hostname'] == {{ rsync_sender_hostname }}
+
+- name: Install server
+  include_tasks: server.yml
+  when: ansible_facts['hostname'] != {{ rsync_sender_hostname }}
