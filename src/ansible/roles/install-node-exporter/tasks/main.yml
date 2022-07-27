@@ -1,10 +1,12 @@
 ---
+# Проверяем установлен ли уже node_exporter, если да то запоминаем его версию
 - name: Check current node_exporter version.
   command: "{{ node_exporter_bin_path }} --version"
   failed_when: false
   changed_when: false
   register: node_exporter_version_check
 
+# Скачиваем и распаковываем node_exporter во временную папку.
 - name: Download and unarchive node_exporter into temporary location.
   unarchive:
     src: "{{ node_exporter_download_url }}"
@@ -16,6 +18,7 @@
     or node_exporter_version not in node_exporter_version_check.stdout
   register: node_exporter_download_check
 
+# Перемещаем исполняемый файл из временной папки в постоянное место расположение, согласно заданной переменной.
 - name: Move node_exporter binary into place.
   copy:
     src: "/tmp/node_exporter-{{ node_exporter_version }}.linux-{{ node_exporter_arch }}/node_exporter"
@@ -25,12 +28,14 @@
   notify: restart node_exporter
   when: node_exporter_download_check is changed
 
+# Создаем пользователя для запуска сервиса
 - name: Create node_exporter user.
   user:
     name: node_exporter
     shell: /sbin/nologin
     state: present
 
+# Копируем и заполняем шаблон для создания systemd файла сервиса
 - name: Copy the node_exporter systemd unit file.
   template:
     src: node_exporter.service.j2
@@ -38,18 +43,22 @@
     mode: 0644
   register: node_exporter_service
 
+# Перезапускаем службу
 - name: Reload systemd daemon if unit file is changed.
   systemd:
     daemon_reload: true
   notify: restart node_exporter
   when: node_exporter_service is changed
 
+# Провеяем что все запущено и работает
 - name: Ensure node_exporter is running and enabled at boot.
   service:
     name: node_exporter
     state: "{{ node_exporter_state }}"
     enabled: "{{ node_exporter_enabled }}"
 
+# Провемяем работает ли сервис запросом на WEB-часть. 
+# В проде возможно слишком, но иногда, при получении "тормозных" виртуальными машинами, сигнализировала о необходимости пересоздать инфраструктуру.
 - name: Verify node_exporter is responding to requests.
   uri:
     url: http://localhost:9100/
