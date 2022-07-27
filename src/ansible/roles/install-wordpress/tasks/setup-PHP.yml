@@ -1,14 +1,15 @@
 ---
+# Добавляеи ключи от репозитория с пакетами для PHP 7.4 и выше
 - name: Import remi GPG key.
   rpm_key:
     key: "https://rpms.remirepo.net/RPM-GPG-KEY-remi2018"
     state: present
-
+# Устанавливаем новый репозиторий
 - name: Install remi repo.
   yum:
     name: "https://rpms.remirepo.net/enterprise/remi-release-7.rpm"
     state: present
-
+# Устанавливаем PHP 7.4
 - name: Ensure PHP packages is installed.
   yum:
     name: '{{ item }}'

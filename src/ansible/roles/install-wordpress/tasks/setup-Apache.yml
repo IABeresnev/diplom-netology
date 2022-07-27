@@ -1,21 +1,22 @@
 ---
+# Добавляем репозиторий для установки пакетов
 - name: Add epel-release repo
   yum:
     name: epel-release
     state: present
-
+# Устанавливаем Apache
 - name: Ensure Httpd package is installed.
   yum:
     name: httpd
     state: present
-
+# Включаем сервис на автозапуск и проверяем что он не заблокирован
 - name: Enable service httpd and ensure it is not masked
   become: true
   systemd:
     name: httpd
     enabled: yes
     masked: no
-
+# Запускаем сервис
 - name: Start httpd
   service:
     name: httpd

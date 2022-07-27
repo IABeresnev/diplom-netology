@@ -2,10 +2,16 @@
 
 Установка и настрйока сервера приложений. Apache в качестве web-сервера, php74.
 
-Role Variables
---------------
+## Role Variables
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+`WP_HOME: "'https://wordpress.itili4.ru'"`    WP_HOME для wp-config.php
+WP_SITEURL: "'https://wordpress.itili4.ru'"   WP_HOME для wp-config.php
+WP_DB_USER: "wordpress"                       WP_HOME для wp-config.php 
+WP_DB_PASS: "wordpress"                       WP_HOME для wp-config.php
+WP_DB_HOST: "db01.itili4.ru"                  WP_HOME для wp-config.php
+WP_DB_NAME: "wordpress"                       WP_HOME для wp-config.php      
+WP_PROXY_HOST: "192.168.101.11"               WP_HOME для wp-config.php
+WP_PROXY_PORT: "8118"                         WP_HOME для wp-config.php
 
 Dependencies
 ------------

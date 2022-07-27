@@ -1,8 +1,13 @@
 ---
-# tasks file for install-wordpress
+# Установка WEB-сервиса Apache
 - include_tasks: setup-Apache.yml
+# Установка обработчика PHP
 - include_tasks: setup-PHP.yml
+# Настройка обработчика PHP
 - include_tasks: configure-PHP.yml
+# Настройка WEB-сервиса Apache
 - include_tasks: configure-Apache.yml
+# Установка приложения(движка сайта)
 - include_tasks: setup-Wordpress.yml
+# Настройка приложения
 - include_tasks: configure-Wordpress.yml

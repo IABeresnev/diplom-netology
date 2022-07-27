@@ -1,98 +1,95 @@
 ---
-  - name: Paste Httpd Config
-    copy:
-      src: httpd.conf
-      dest: /etc/httpd/conf/httpd.conf
-      owner: root
-      group: root
-      mode: 0640
+# Копируем предварительно подготовлнный конфигурационный файл Apache  
+- name: Paste Httpd Config
+  copy:
+    src: httpd.conf
+    dest: /etc/httpd/conf/httpd.conf
+    owner: root
+    group: root
+    mode: 0640
+# Создаем и насраиваем директории для работы Apache
+- name: Set up httpd directories
+  file:
+    path: "/etc/httpd/{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0640
+  with_items:
+    - sites-available
+    - sites-enabled
+# Копируем конфигурационный файл сайта для Apache(Vhost)
+- name: Add Site Config
+  copy:
+    src: wordpress.itili4.ru.conf
+    dest: /etc/httpd/sites-available/wordpress.itili4.ru.conf
+    owner: root
+    group: root
+    mode: 0640
+# Включаем сайт в работу
+- name: Enable Site Config
+  file:
+    src: /etc/httpd/sites-available/wordpress.itili4.ru.conf
+    dest: /etc/httpd/sites-enabled/wordpress.itili4.ru.conf
+    state: link
+# Создаем корневые директории для сайта
+# Для содержимого сайта
+- name: Create WebRoot sites
+  file:
+    dest: /var/www/wordpress.itili4.ru/public_html
+    mode: 0755
+    state: directory
+    owner: apache
+    group: apache
+# Для логов доступа и ошибок
+- name: Create WebRoot sites logs
+  file:
+    dest: /var/www/wordpress.itili4.ru/logs
+    mode: 0755
+    state: directory
+    owner: apache
+    group: apache
+# Инициализируем пустые лог-файлы
+- name: Create sites log files
+  file:
+    dest: /var/www/wordpress.itili4.ru/logs/{{ item }}.log
+    mode: 0644
+    state: touch
+    owner: apache
+    group: apache
+  loop:
+    - error
+    - access
+# Настраиваем права доступа на директорию сайта
+- name: WebRoot Permissions Sites
+  file:
+    dest: /var/www/wordpress.itili4.ru/
+    mode: 0755
+    state: directory
+    owner: apache
+    group: apache
+    recurse: true
 
-  - name: Set up httpd directories
-    file:
-      path: "/etc/httpd/{{ item }}"
-      state: directory
-      owner: root
-      group: root
-      mode: 0640
-    with_items:
-      - sites-available
-      - sites-enabled
-  
-  - name: Add Site Config
-    copy:
-      src: wordpress.itili4.ru.conf
-      dest: /etc/httpd/sites-available/wordpress.itili4.ru.conf
-      owner: root
-      group: root
-      mode: 0640
-  
-  - name: Enable Site Config
-    file:
-      src: /etc/httpd/sites-available/wordpress.itili4.ru.conf
-      dest: /etc/httpd/sites-enabled/wordpress.itili4.ru.conf
-      state: link
-
-
-  - name: Create WebRoot sites
-    file:
-      dest: /var/www/wordpress.itili4.ru/public_html
-      mode: 0755
-      state: directory
-      owner: apache
-      group: apache
-
-  - name: Create WebRoot sites logs
-    file:
-      dest: /var/www/wordpress.itili4.ru/logs
-      mode: 0755
-      state: directory
-      owner: apache
-      group: apache
-  
-  - name: Create sites log files
-    file:
-      dest: /var/www/wordpress.itili4.ru/logs/{{ item }}.log
-      mode: 0644
-      state: touch
-      owner: apache
-      group: apache
-    loop:
-      - error
-      - access
- 
-  - name: WebRoot Permissions Sites
-    file:
-      dest: /var/www/wordpress.itili4.ru/
-      mode: 0755
-      state: directory
-      owner: apache
-      group: apache
-      recurse: true
-  
-  - name: Allow apache to modify files in wordpress.itili4.ru/public_html
-    community.general.sefcontext:
-      target: '/var/www/wordpress.itili4.ru/public_html(/.*)?'
-      setype: httpd_sys_rw_content_t
-      state: present
-
-  - name: Apply new SELinux file context to filesystem wordpress.itili4.ru/public_html
-    ansible.builtin.command: restorecon -irv /var/www/wordpress.itili4.ru/public_html
-
-  - name: Apply new SELinux file context to filesystem wordpress.itili4.ru/logs
-    ansible.builtin.command: semanage fcontext -a -t httpd_log_t "/var/www/wordpress.itili4.ru/logs(/.*)?"
-
-  - name: Allow webserver to connect to remote database through SELinux
-    ansible.builtin.command: setsebool -P httpd_can_network_connect_db 1
-
-  - name: Apply new SELinux file context to filesystem wordpress.itili4.ru/logs
-    ansible.builtin.command: restorecon -Rv /var/www/wordpress.itili4.ru/logs
-
-  - name: Ensure Apache is running
-    service:
-      name: httpd
-      state: started
-
-  - name: Reload Apache
-    service:
-      name: httpd
-      state: reloaded
+# Магия по настройке прав доступа пользователя Apache в selinux
+- name: Allow apache to modify files in wordpress.itili4.ru/public_html
+  community.general.sefcontext:
+    target: '/var/www/wordpress.itili4.ru/public_html(/.*)?'
+    setype: httpd_sys_rw_content_t
+    state: present
+- name: Apply new SELinux file context to filesystem wordpress.itili4.ru/public_html
+  ansible.builtin.command: restorecon -irv /var/www/wordpress.itili4.ru/public_html
+- name: Apply new SELinux file context to filesystem wordpress.itili4.ru/logs
+  ansible.builtin.command: semanage fcontext -a -t httpd_log_t "/var/www/wordpress.itili4.ru/logs(/.*)?"
+- name: Allow webserver to connect to remote database through SELinux
+  ansible.builtin.command: setsebool -P httpd_can_network_connect_db 1
+- name: Apply new SELinux file context to filesystem wordpress.itili4.ru/logs
+  ansible.builtin.command: restorecon -Rv /var/www/wordpress.itili4.ru/logs
+# Проверме что серивс Apache запущен и работает
+- name: Ensure Apache is running
+  service:
+    name: httpd
+    state: started
+- name: Reload Apache
+  service:
+    name: httpd
+    state: reloaded

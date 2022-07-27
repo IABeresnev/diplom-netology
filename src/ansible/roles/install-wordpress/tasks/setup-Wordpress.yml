@@ -1,11 +1,5 @@
 ---
-#  - name: Add Sample Page
-#    copy:
-#      src: index.html
-#      dest: /var/www/wordpress.itili4.ru/public_html/index.html
-#      owner: apache
-#      group: apache
-#      mode: 0755
+# Скачиваем и распаковываем самую последнюю версию движка сайта WordPress
 - name: Download and unpack latest WordPress
   ansible.builtin.unarchive:
     src: https://wordpress.org/latest.tar.gz
@@ -14,22 +8,21 @@
     group: apache
     mode: 0755
     remote_src: yes
-#    creates: "/var/www/{{ http_host }}/wordpress"
 
+# Премещаем необходимые файлы в корневую директорию сайта
 - name: Move wordpress to webroot
-  #command: cp /var/www/wordpress.itili4.ru/public_html/wordpress/* /var/www/wordpress.itili4.ru/public_html/
   copy:
     src: /var/www/wordpress.itili4.ru/public_html/wordpress/
     dest: /var/www/wordpress.itili4.ru/public_html/
     remote_src: yes
     owner: apache
     group: apache
-
+# Копируем  и заполняем конфигурационный файлы движка
 - name: Set up wp-config
   template:
     src: "wp-config.php"
     dest: "/var/www/wordpress.itili4.ru/public_html/wp-config.php"
-
+# Проверяем права на коренувую директорию сайта
 - name: WebRoot Permissions Sites
   file:
     dest: /var/www/wordpress.itili4.ru/public_html/
@@ -38,7 +31,7 @@
     owner: apache
     group: apache
     recurse: true
-
+# Пеоезапускаем Apache.
 - name: Reload Apache
   service:
     name: httpd
