@@ -1,24 +1,24 @@
 ---
 
-nginx_revproxy_sites:                                         # List of sites to reverse proxy
-  example.com:                                                # Domain name
+nginx_revproxy_sites:                                         # Список доменов для reverse прокси
+  example.com:                                                # Доменное имя
     client_max_body_size: "256M"
     proxy_read_timeout: "360"
-    domains:                                                  # List of server_name aliases
+    domains:                                                  # Alias для доменного имени
       - example.com
       - www.example.com
-    upstreams:                                                # List of Upstreams
+    upstreams:                                                # Куда перенаправлять запрос Upstreams
       - {backend_address: 192.168.0.100, backend_port: 80}
       - {backend_address: 192.168.0.101, backend_port: 8080}
-    ssl: true                                                 # Set to True if you want to redirect http to https
-    hsts_max_age: 63072000                                    # Set HSTS header with max-age defined
-    letsencrypt: false                                        # Set to True if you want use letsencrypt
-    letsencrypt_email: ""                                     # Set email for letencrypt cert
+    ssl: true                                                 # Если надо перенаправлять http на https указываем true
+    hsts_max_age: 63072000                                    # HSTS header устанавливаем максимальную длительность
+    letsencrypt: false                                        # true если используем letsencrypt
+    letsencrypt_email: ""                                     # email для letsencrypt
 
 nginx_revproxy_certbot_auto: false
 
 # Remove WebRoot Sites
-nginx_revproxy_remove_webroot_sites: true
+#nginx_revproxy_remove_webroot_sites: true
 
 # De-activate Sites
-nginx_revproxy_de_activate_sites: true
+#nginx_revproxy_de_activate_sites: true

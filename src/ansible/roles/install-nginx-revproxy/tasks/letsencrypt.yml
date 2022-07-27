@@ -1,36 +1,29 @@
 ---
-
+# Устанавливаем пакеты для получения сертификатов
 - name: Install certbot-auto
   get_url:
     url: https://dl.eff.org/certbot-auto
     dest: /usr/bin/certbot-auto
     mode: "a+x"
   when: nginx_revproxy_certbot_auto
-  tags:
-    - lesencrypt
-    - nginxrevproxy
-
+# Устанавливаем пакеты для получения сертификатов
 - name: Install certbot from repository
   yum:
     name: "{{ nginx_revproxy_certbot_packages }}"
     state: present
   when: not nginx_revproxy_certbot_auto
-  tags:
-    - lesencrypt
-    - nginxrevproxy
+# Перезапускаем Nginx
 - name: Reload Nginx
   service:
     name: nginx
     state: restarted
-
+# Получаем список сайтов для сертификатов
 - name: Get Active Sites
   command: ls -1 /etc/nginx/conf.d/
   changed_when: "active.stdout_lines != nginx_revproxy_sites.keys()|sort()"
   check_mode: false
   register: active
-  tags:
-    - lesencrypt
-    - nginxrevproxy
+
 
 # - name: Enable sites for ACME protocol
 #   block:
@@ -75,6 +68,7 @@
 #     - lesencrypt
 #     - nginxrevproxy
 
+# Запрашиваем сертификаты
 - name: Generate certs (first time)
   command: |
     certbot{{ '-auto' if nginx_revproxy_certbot_auto else '' }} certonly
@@ -85,10 +79,8 @@
     --agree-tos creates=/etc/letsencrypt/live/{{ item.key }}/fullchain.pem --test-cert
   with_dict: "{{ nginx_revproxy_sites }}"
   when: item.value.letsencrypt | default(False)
-  tags:
-    - lesencrypt
-    - nginxrevproxy
 
+# Обновляем конфигурационные файлы сайтов, прописывая в них необходимые опции, для работы с сертификатами.
 - name: Update Site Config
   template:
     src: reverseproxy_ssl.conf.j2
@@ -100,10 +92,8 @@
   notify: Reload Nginx
   when:
     - item.value.letsencrypt | default(False)
-  tags:
-    - lesencrypt
-    - nginxrevproxy
 
+# Прописывает в cron автозапуск скрипта для получения сертификатов и их автоматического продления.
 - name: Insert cert-bot renew in crontab
   cron:
     name: "cert-bot renew"
@@ -111,6 +101,3 @@
     hour: "3"
     minute: "30"
     weekday: "1"
-  tags:
-    - lesencrypt
-    - nginxrevproxy

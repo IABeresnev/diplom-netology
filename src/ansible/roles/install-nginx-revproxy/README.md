@@ -1,38 +1,30 @@
-Role Name
-=========
+# Reverse-proxy Nginx и LetsEncrypt.
 
-A brief description of the role goes here.
+Установка, настройка обратного прокси, получение сертификатов для доменов, настройка автоматического продления через cron.
 
-Requirements
-------------
+## Requirements
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Использование роли возможно только на RHEL-like дистрибутивах, работоспособност проверена на Centos 7
 
-Role Variables
---------------
+## Role Variables
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+Основные переменные описаны ниже, полный список переменных представлен в директории [defaults/main.yml](defaults/main.yml):
 
-Dependencies
-------------
+nginx_revproxy_sites:                                         # Список доменов для reverse прокси
+  example.com:                                                # Доменное имя
+    client_max_body_size: "256M"
+    proxy_read_timeout: "360"
+    domains:                                                  # Alias для доменного имени
+      - example.com
+      - www.example.com
+      - app.example.com
+    upstreams:                                                # Куда перенаправлять запрос Upstreams
+      - {backend_address: 192.168.0.100, backend_port: 80}
+      - {backend_address: app.example.com, backend_port: 9090}
+    ssl: true                                                 # Если надо перенаправлять http на https указываем true
+    hsts_max_age: 63072000                                    # HSTS header устанавливаем максимальную длительность
+    letsencrypt: false                                        # true если используем letsencrypt
+    letsencrypt_email: ""                                     # email для letsencrypt
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+nginx_revproxy_certbot_auto: false
 
-Example Playbook
-----------------
-
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
-
-License
--------
-
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
