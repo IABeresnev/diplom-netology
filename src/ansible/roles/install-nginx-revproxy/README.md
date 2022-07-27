@@ -10,6 +10,7 @@
 
 Основные переменные описаны ниже, полный список переменных представлен в директории [defaults/main.yml](defaults/main.yml):
 
+```
 nginx_revproxy_sites:                                         # Список доменов для reverse прокси
   example.com:                                                # Доменное имя
     client_max_body_size: "256M"
@@ -27,4 +28,4 @@ nginx_revproxy_sites:                                         # Список д�
     letsencrypt_email: ""                                     # email для letsencrypt
 
 nginx_revproxy_certbot_auto: false
-
+```
