@@ -1,2 +1,10 @@
 ---
 # defaults file for install-wordpress
+WP_HOME: "'https://wordpress.itili4.ru'"
+WP_SITEURL: "'https://wordpress.itili4.ru'"
+WP_DB_USER: "wordpress"
+WP_DB_PASS: "wordpress"
+WP_DB_HOST: "db01.itili4.ru"
+WP_DB_NAME: "wordpress"
+WP_PROXY_HOST: "192.168.101.11"
+WP_PROXY_PORT: "8118"

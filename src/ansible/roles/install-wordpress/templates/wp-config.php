@@ -9,8 +9,8 @@ if($_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https'){
     $_SERVER['SERVER_PORT'] = 443;
 }
 
-define('WP_HOME','https://wordpress.itili4.ru');
-define('WP_SITEURL','https://wordpress.itili4.ru');
+define('WP_HOME', '{{ WP_HOME }}' );
+define('WP_SITEURL', '{{ WP_SITEURL }}'); 
 /**
  * @link https://codex.wordpress.org/Editing_wp-config.php
  *
@@ -19,16 +19,16 @@ define('WP_SITEURL','https://wordpress.itili4.ru');
 
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define( 'DB_NAME', 'wordpress' );
+define( 'DB_NAME', '{{ WP_DB_NAME }}' );
 
 /** MySQL database username */
-define( 'DB_USER', 'wordpress' );
+define( 'DB_USER', '{{ WP_DB_USER }}' );
 
 /** MySQL database password */
-define( 'DB_PASSWORD', 'wordpress' );
+define( 'DB_PASSWORD', '{{ WP_DB_PASS }}' );
 
 /** MySQL hostname */
-define( 'DB_HOST', 'db01.itili4.ru' );
+define( 'DB_HOST', '{{ WP_DB_HOST }}' );
 
 /** Database Charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8' );
@@ -36,8 +36,8 @@ define( 'DB_CHARSET', 'utf8' );
 /** The Database Collate type. Don't change this if in doubt. */
 define( 'DB_COLLATE', '' );
 
-define('WP_PROXY_HOST', '192.168.101.11');
-define('WP_PROXY_PORT', '8118');
+define('WP_PROXY_HOST', '{{ WP_PROXY_HOST }}');
+define('WP_PROXY_PORT', '{{ WP_PROXY_PORT }}' );
 define('WP_PROXY_USERNAME', '');
 define('WP_PROXY_PASSWORD', '');
 define('WP_PROXY_BYPASS_HOSTS', 'localhost');

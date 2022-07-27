@@ -10,7 +10,7 @@
   hosts: dbservers
   roles: 
    -  { role: install-node-exporter, become: yes } 
-   -  { role: install-mysql, become: yes }
+   -  { role: install-mysql-service, become: yes }
   environment:
         http_proxy: http://192.168.101.11:8118
         https_proxy: http://192.168.101.11:8118
