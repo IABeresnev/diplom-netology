@@ -1,31 +1,29 @@
 ---
-# tasks file for rsync-server
-
+# Устанавливаем сервис
 - name: rsyncd | install rsync
   yum:
     pkg: rsync
     state: present
-
+# Настраиваем директорию хранения файлов журнала
 - name: rsyncd | create log directory
   file:
     path: /var/log/rsyncd
     state: directory
     mode: 0755
-
+# Настраиваем точки обмена файлами
 - name: rsyncd | configure shares
   template:
     dest: /etc/rsyncd.conf
     src: etc-rsyncd-conf.j2
     mode: 0644
-    # No need to reload, file is re-read on each client connection.
-
+# Настраиваем периодичность хранения файлов журнала
 - name: rsyncd | configure logrotate
   template:
     backup: false
     dest: /etc/logrotate.d/rsyncd
     src: logrotated-rsyncd.j2
     mode: 0644
-
+# Устанавлвиаем парава доступа на файл с "секретами"
 - name: Copy file with owner and permissions
   copy:
     src: rsyncd.scrt
@@ -33,17 +31,16 @@
     owner: root
     group: root
     mode: '0600'
-
+# Настраиваем Selinux
 - name: rsyncd | selinux allow network connect
   seboolean:
     name: rsync_export_all_ro
     state: true
     persistent: true
-#  when: selinux_enabled
 
 - name: Semanage to permissive mode ro rsync
   ansible.builtin.command: semanage permissive -a rsync_t
-
+# Проверяем наличия разрешени на автозапуск и запускаем сервис
 - name: rsyncd | start and enable service
   service:
     name: rsyncd
