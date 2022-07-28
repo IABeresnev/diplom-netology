@@ -1,11 +1,12 @@
 ---
+# Проверяем наличие установленных расширений
 - name: Check which plugins are installed
   find:
     file_type: directory
     recurse: false
     paths: "{{ grafana_data_dir }}/plugins"
   register: installed_plugins
-
+# Устанавливаем дополнительные расширения
 - name: Install plugins
   become: true
   command: "grafana-cli --pluginsDir {{ grafana_data_dir }}/plugins plugins install {{ item }}"

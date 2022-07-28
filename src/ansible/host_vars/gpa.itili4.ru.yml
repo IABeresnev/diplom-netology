@@ -23,37 +23,14 @@ prometheus_targets:
         - 192.168.102.15:9100
       labels:
         env: GitlabRunner
-#prometheus_alertmanager_config:
-#     static_configs:
-#       - targets: ["127.0.0.1:9093"]
+prometheus_alertmanager_config:
+     static_configs:
+       - targets: ["127.0.0.1:9093"]
 
 grafana_security:
   admin_user: admin
   admin_password: "admin"
-#grafana_dashboards: 
-#  - dashboard_id: '13191' # WordPress dashboard
-#    revision_id: '1'
-#    datasource: 'Prometheus' # Change DataSource to MySQL with WP-Statics Plugin
-#  - dashboard_id: '7362'   # MySQL Percona Dashboard
-#    revision_id: '5'
-#    datasource: 'Prometheus'
-#  - dashboard_id: '1860'  # NodeExporter Dashboard
-#    revision_id: '27'
-#    datasource: 'Prometheus'
 
-#grafana_datasources: []
-#  - name: "Prometheus"
-#    type: "prometheus"
-#    access: "proxy"
-#    url: "http://prometheus.mydomain"
-#    basicAuth: true
-#    basicAuthUser: "admin"
-#    basicAuthPassword: "password"
-#    isDefault: true
-#    jsonData:
-#      tlsAuth: false
-#      tlsAuthWithCACert: false
-#      tlsSkipVerify: true
 grafana_datasources:
   - name: prometheus
     type: prometheus

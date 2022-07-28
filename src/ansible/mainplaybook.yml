@@ -29,8 +29,8 @@
   hosts: gpaservers
   roles:
 #    - { role: install-node-exporter, become: yes }
-    - { role: install-prometheus, become: yes }
-#    - { role: install-grafana, become: yes }
+#    - { role: install-prometheus, become: yes }
+    - { role: install-grafana, become: yes }
 #    - { role: install-alertmanager, become: yes }
   environment:
         http_proxy: http://192.168.101.11:8118

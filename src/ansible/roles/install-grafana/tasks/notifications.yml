@@ -1,4 +1,5 @@
 ---
+# Создаем и настраиваем каналы оповещений
 - name: Create/Delete/Update alert notifications channels (provisioning)
   become: true
   copy:

@@ -1,4 +1,5 @@
 ---
+# Проверяем наличие источников данные через API
 - name: Ensure datasources exist (via API)
   grafana_datasource:
     grafana_url: "{{ grafana_api_url }}"
@@ -22,7 +23,7 @@
     aws_custom_metrics_namespaces: "{{ item.aws_custom_metrics_namespaces | default(omit) }}"
   with_items: "{{ grafana_datasources }}"
   when: not grafana_use_provisioning
-
+# Управление источниками данных через провиженинг
 - name: Create/Update datasources file (provisioning)
   become: true
   copy:

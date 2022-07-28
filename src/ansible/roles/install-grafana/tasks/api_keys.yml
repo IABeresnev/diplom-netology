@@ -1,11 +1,12 @@
 ---
+# Проверяем что есть директория для хранения ключей
 - name: Ensure grafana key directory exists
   become: false
   file:
     path: "{{ grafana_api_keys_dir }}/{{ inventory_hostname }}"
     state: directory
   delegate_to: localhost
-
+# Проверяем есть ли ключи уже
 - name: Check api key list
   uri:
     url: "{{ grafana_api_url }}/api/auth/keys"
@@ -15,7 +16,7 @@
     return_content: true
   no_log: true
   register: existing_api_keys
-
+# Создаем ключи
 - name: Create grafana api keys
   uri:
     url: "{{ grafana_api_url }}/api/auth/keys"
@@ -29,7 +30,7 @@
   no_log: true
   when: ((existing_api_keys['json'] | selectattr("name", "equalto", item['name'])) | list) | length == 0
   register: new_api_keys
-
+# Разрешаем доступ на просмотр к файлам с ключами
 - name: Create api keys file to allow the keys to be seen and used by other automation
   become: false
   copy:

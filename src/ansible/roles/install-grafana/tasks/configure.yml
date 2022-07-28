@@ -1,4 +1,5 @@
 ---
+# Проверяем налчиие директорий для Grafana
 - name: Ensure grafana configuration directories exist
   file:
     path: "{{ item }}"
@@ -13,7 +14,7 @@
     - "/etc/grafana/provisioning/dashboards"
     - "/etc/grafana/provisioning/notifiers"
     - "/etc/grafana/provisioning/plugins"
-
+# Создаем(копируем и заполняем шаблон) конфигурационного файла
 - name: Create grafana main configuration file
   template:
     src: grafana.ini.j2
@@ -23,20 +24,7 @@
     mode: 0640
   no_log: true
   notify: restart grafana
-
-- name: Create grafana LDAP configuration file
-  template:
-    src: ldap.toml.j2
-    dest: "{{ grafana_auth.ldap.config_file | default('/etc/grafana/ldap.toml') }}"
-    owner: root
-    group: grafana
-    mode: 0640
-  when:
-    - "'ldap' in grafana_auth"
-    - "'enabled' not in grafana_auth.ldap or grafana_auth.ldap.enabled"
-  no_log: true
-  notify: restart grafana
-
+# Создаем папки необходимые для Grafana
 - name: Create grafana directories
   file:
     path: "{{ item }}"
@@ -49,7 +37,7 @@
     - "{{ grafana_data_dir }}"
     - "{{ grafana_data_dir }}/dashboards"
     - "{{ grafana_data_dir }}/plugins"
-
+# Создаем папки необходимые для Grafana
 - block:
     - name: Create grafana socket directory
       file:
@@ -69,16 +57,7 @@
   when:
     - grafana_server.protocol is defined and grafana_server.protocol == 'socket'
     - grafana_server.socket | dirname != '/var/run'
-
-- name: Enable grafana to ports lower than port 1024
-  capabilities:
-    path: /usr/sbin/grafana-server
-    capability: CAP_NET_BIND_SERVICE+ep
-    state: present
-  when:
-    - grafana_port | int <= 1024
-    - grafana_cap_net_bind_service
-
+# Провемяем что автозапуск сервиса разрешен и запускаем сервис
 - name: Enable and start Grafana systemd unit
   systemd:
     name: grafana-server
