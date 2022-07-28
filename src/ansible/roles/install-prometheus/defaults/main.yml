@@ -82,7 +82,7 @@ prometheus_scrape_configs:
 
 
 
-# Alternative config file name, searched in ansible templates path.
+# Указываем свои файлы конфигурации если они используются
 prometheus_config_file: 'prometheus.yml.j2'
 
 prometheus_alert_rules_files:
@@ -92,6 +92,7 @@ prometheus_static_targets_files:
   - prometheus/targets/*.yml
   - prometheus/targets/*.json
 
+# Набор тестовых алертов для проверки работы связки Prometheus и Alertmanager
 prometheus_alert_rules:
   - alert: Watchdog
     expr: vector(1)
