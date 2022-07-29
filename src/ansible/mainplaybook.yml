@@ -1,26 +1,27 @@
 --- 
-#- name: Reverse proxy and internet gateway
-#  hosts: reversproxy
-#  roles: 
-#    -  { role: install-node-exporter, become: yes }
-#    -  { role: install-privoxy, become: yes }
-#    -  { role: install-nginx-revproxy, become: yes }
-#
-#- name: Install MySQL Cluster
-#  hosts: dbservers
-#  roles: 
-#   -  { role: install-node-exporter, become: yes } 
-#   -  { role: install-mysql-service, become: yes }
-#  environment:
-#        http_proxy: http://192.168.101.11:8118
-#        https_proxy: http://192.168.101.11:8118
-#
+- name: Reverse proxy and internet gateway
+  hosts: reversproxy
+  roles: 
+    -  { role: install-initpreroles}
+    -  { role: install-node-exporter, become: yes}
+    -  { role: install-privoxy, become: yes }
+    -  { role: install-nginx-revproxy, become: yes }
+
+- name: Install MySQL Cluster
+  hosts: dbservers
+  roles: 
+   -  { role: install-node-exporter, become: yes } 
+   -  { role: install-mysql-service, become: yes }
+  environment:
+        http_proxy: http://192.168.101.11:8118
+        https_proxy: http://192.168.101.11:8118
+
 - name: Setup Application server
   hosts: frontend
   roles:
-#    - { role: install-node-exporter, become: yes }
-#    - { role: install-wordpress, become: yes }
-#    - { role: install-rsyncserver, become: yes }
+    - { role: install-node-exporter, become: yes }
+    - { role: install-wordpress, become: yes }
+    - { role: install-rsyncserver, become: yes }
   environment:
         http_proxy: http://192.168.101.11:8118
         https_proxy: http://192.168.101.11:8118
@@ -28,8 +29,8 @@
 - name: Setup Monitoring server
   hosts: gpaservers
   roles:
-#    - { role: install-node-exporter, become: yes }
-#    - { role: install-prometheus, become: yes }
+    - { role: install-node-exporter, become: yes }
+    - { role: install-prometheus, become: yes }
     - { role: install-grafana, become: yes }
 #    - { role: install-alertmanager, become: yes }
   environment:

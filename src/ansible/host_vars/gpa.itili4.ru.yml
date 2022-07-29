@@ -3,26 +3,27 @@ prometheus_web_external_url: 'http://prometheus.itili4.ru:9090'
 prometheus_targets: 
   node:
     - targets:
-        - 192.168.101.11:9100
+        - itili4.ru:9100
       labels:
         env: Proxy
     - targets:
-        - 192.168.101.10:9100
+        - wordpress.itili4.ru:9100
       labels:
         env: Frontend
     - targets:
-        - 192.168.101.12:9100
-        - 192.168.101.13:9100
+        - db01.itili4.ru:9100
+        - db02.itili4.ru:9100
       labels:
         env: DB Servers
     - targets:
-        - 192.168.102.14:9100
+        - gitlab.itili4.ru:9100
       labels:
         env: GitlabServer
     - targets:
-        - 192.168.102.15:9100
+        - grunner.itili4.ru:9100
       labels:
         env: GitlabRunner
+        
 prometheus_alertmanager_config:
      static_configs:
        - targets: ["127.0.0.1:9093"]
