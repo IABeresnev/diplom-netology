@@ -3,3 +3,18 @@
   copy:
     src: id_rsa
     dest: /home/centos/.ssh/id_rsa
+    mode: 0600
+
+- name: Install addition packages. Only when addsoft var equal to "install".
+# Добавляем репозитории
+- name: Add epel-release repo
+  yum:
+    name: epel-release
+    state: present
+# Устанавливаем Nginx
+- name: Install git
+  yum:
+    name:
+      - git
+    state: present
+  when: addsoft == "install"

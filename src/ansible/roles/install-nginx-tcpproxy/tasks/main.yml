@@ -1,0 +1,6 @@
+---
+# tasks file for install-nginx-tcpproxy
+- name: Install Nginx
+  include_tasks: install.yml
+- name: Configure Nginx tcpproxy
+  include_tasks: configure.yml

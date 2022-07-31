@@ -117,7 +117,7 @@ mysql_databases:
 mysql_users: 
   -  { 
      name: wordpress, 
-     host: "{{ groups['frontend'][0] }}", 
+     host: "{{ groups['dbha'][0] }}", 
      password: wordpress, 
      priv: "*.*:ALL,GRANT" 
   }

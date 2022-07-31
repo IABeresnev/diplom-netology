@@ -25,8 +25,10 @@ prometheus_targets:
         env: GitlabRunner
         
 prometheus_alertmanager_config:
-     static_configs:
-       - targets: ["127.0.0.1:9093"]
+  - static_configs:
+      - targets:
+          - localhost:9093
+#     proxy_url: "127.0.0.2"
 
 grafana_security:
   admin_user: admin
@@ -42,15 +44,19 @@ grafana_datasources:
 
 alertmanager_version: latest
 alertmanager_web_external_url: 'http://alertmanager.itili4.ru:9093/'
-alertmanager_slack_api_url: "http://example.com"
 alertmanager_receivers:
-  - name: slack
-    slack_configs:
-      - send_resolved: true
-        channel: '#alerts'
+- name: 'email'
+  email_configs:
+  - to: 'sd@itili4.ru'
+    from: 'alert@itili4.ru'
+    smarthost: 'mx.itili4.ru:25'
+    auth_username: 'user'
+    auth_identity: 'alert'
+    auth_password: 'pass'
 alertmanager_route:
-      group_by: ['alertname', 'cluster', 'service']
-      group_wait: 30s
-      group_interval: 5m
-      repeat_interval: 3h
-      receiver: slack
+  group_by: ['alertname']
+  group_wait: 30s
+  group_interval: 10m
+  repeat_interval: 60m
+  receiver: 'email'
+

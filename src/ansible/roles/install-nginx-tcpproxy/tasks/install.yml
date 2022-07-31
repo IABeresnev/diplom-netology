@@ -1,0 +1,32 @@
+---
+# Устраняем проблемы с Selinux и получаем проблемы с безопасностью, но если логировать и парсить audit.log то все будет под контролем.
+- name: Selinux to permissive mode
+  selinux:
+    policy: targeted
+    state: permissive
+# Перезагружаемся и ждем для продолжения, если не ждать падает в ошибку.
+- name: Reboot machine and wait 60 sec
+  ansible.builtin.reboot:
+    reboot_timeout: 60
+# Добавляем репозитории
+- name: Add epel-release repo
+  yum:
+    name: epel-release
+    state: present
+# Устанавливаем Nginx
+- name: Install Nginx
+  yum:
+    name:
+      - nginx-mod-stream
+    state: present
+  register:
+    nginxinstalled
+
+# Проверяем что сервис разрешен для автозапуска.
+- name: Enable service nginx and ensure it is not masked
+  become: true
+  systemd:
+    name: nginx
+    state: started
+    enabled: yes
+    masked: no

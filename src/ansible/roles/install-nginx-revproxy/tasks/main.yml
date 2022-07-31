@@ -56,34 +56,6 @@
   when:
     - nginxinstalled is success
 
-# - name: Get Active Sites
-#   command: ls -1 /etc/nginx/conf.d/
-#   changed_when: "active.stdout_lines != nginx_revproxy_sites.keys()|sort()"
-#   check_mode: false
-#   register: active
-
-# - name: De-activate Sites
-#   file:
-#     path: /etc/nginx/conf.d/{{ item }}
-#     state: absent
-#   with_items: "{{ active.stdout_lines }}"
-#   notify: Reload Nginx
-#   when:
-#     - item not in nginx_revproxy_sites
-#     - nginx_revproxy_de_activate_sites
-
-# - name: Enable Site Config
-#   file:
-#     src: /etc/nginx/conf.d/{{ item.key }}.conf
-#     dest: /etc/nginx/sites-enabled/{{ item.key }}
-#     state: link
-#   with_dict: "{{ nginx_revproxy_sites }}"
-#   notify: Reload Nginx
-#   when:
-#     - siteconfig is success
-#     - not item.value.letsencrypt | default(True)
-#     - not ansible_check_mode
-
 # Создаем корневые директории для получения сертификатов
 - name: Create WebRoot sites
   file:
@@ -110,26 +82,7 @@
   notify: Reload Nginx
   when:
     - nginxinstalled is success
-
-# - name: Get WebRoot Sites
-#   command: ls -1 /var/www/
-#   changed_when: "webroot.stdout_lines != nginx_revproxy_sites.keys()|sort()"
-#   check_mode: false
-#   register: webroot
-#   tags:
-#     - nginxrevproxy
-
-# - name: Remove WebRoot Sites
-#   file:
-#     path: /var/www/{{ item }}/
-#     state: absent
-#   with_items: "{{ webroot.stdout_lines }}"
-#   notify: Reload Nginx
-#   when:
-#     - item not in nginx_revproxy_sites
-#     - nginx_revproxy_remove_webroot_sites
-#   tags:
-#     - nginxrevproxy
-
 # Подключаем задачи для получения сертификатов
-- include_tasks: letsencrypt.yml
+- name: Exucte task if letsencrypt var equal to "get".
+  include_tasks: letsencrypt.yml
+  when: dole == "get"

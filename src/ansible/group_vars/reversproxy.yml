@@ -79,3 +79,5 @@ nginx_revproxy_remove_webroot_sites: true
 nginx_revproxy_de_activate_sites: false
 
 privoxy_listen_address: "192.168.101.11"
+
+dole: "no"

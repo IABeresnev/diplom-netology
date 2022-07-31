@@ -9,6 +9,7 @@ resource "local_file" "inventory" {
     glservers
     runnerservers
     gpaservers
+    dbha
 
     [reversproxy]
     rproxy.itili4.ru ansible_host=${yandex_compute_instance.rproxy.network_interface.0.nat_ip_address}
@@ -23,6 +24,8 @@ resource "local_file" "inventory" {
     grunner.itili4.ru ansible_host=${yandex_compute_instance.grunner.network_interface.0.ip_address}
     [gpaservers]
     gpa.itili4.ru ansible_host=${yandex_compute_instance.gpa.network_interface.0.ip_address}
+    [dbha]
+    dbha.itili4.ru ansible_host=${yandex_compute_instance.dbha.network_interface.0.ip_address}
 
     [nodes:vars]
     ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -W %h:%p -q centos@${yandex_compute_instance.rproxy.network_interface.0.nat_ip_address}"'

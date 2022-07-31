@@ -61,7 +61,7 @@
 # В проде возможно слишком, но иногда, при получении "тормозных" виртуальными машинами, сигнализировала о необходимости пересоздать инфраструктуру.
 - name: Verify node_exporter is responding to requests.
   uri:
-    url: http://localhost:9100/
+    url: http://{{ ansible_fqdn }}:9100/
     return_content: true
   register: metrics_output
   failed_when: "'Metrics' not in metrics_output.content"
