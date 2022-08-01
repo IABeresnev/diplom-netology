@@ -23,6 +23,10 @@ prometheus_targets:
         - grunner.itili4.ru:9100
       labels:
         env: GitlabRunner
+    - targets:
+        - dbha.itili4.ru:9100
+      labels:
+        env: MysqlReversProxy
         
 prometheus_alertmanager_config:
   - static_configs:
