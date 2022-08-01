@@ -17,7 +17,9 @@
 
 Зарегистрировано доменное имя ITILI4.RU у регистратора reg.ru, управление DNS зоной делегировано в Яндекс CloudDNS.   
 <p align="center"> <img src="img/DomenRegRuDelegation.png")</p><br>  
+
 Необходимо для автоматизации управления DNS записями зоны.<br>
+
 <p align="center"> <img src="img/DomenYandexCloudDNS.png") <br></p>  
 
 # 2. Создание инфраструктуры
