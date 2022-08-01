@@ -27,6 +27,7 @@
 Для создания инфраструктуры использовал Terraform, в качестве backend S3 хранилище от YandexCloud. Создал два workspace prod и stage.  
 Все инфраструктура выполняется от роли сервисного аккаунта с достаточным количеством привилегий.  
 <p align="center"><img src="img/YCloudServiceAcc.png")</p> <br> 
+<p align="center"><img src="img/WorkspaceInBucket.png")</p> <br> 
 
 Отличия в workspace:  
 1) Именя виртуальных машин(не hostname) в панели управления указываются с учетом workspace в котором они созданы.  
@@ -143,8 +144,6 @@ alias terprov="ansible-playbook -i /home/yolo/PycharmProjects/diplom-netology/sr
 Пришел к ней после выполнения всех этапов работы, некоторые конфигурации были изменены(Увеличил RAM у GitlabServer), добавил сервер dbha.itili4.ru для переключения нагрузку в случае падения основного сервера кластера MySQL.  
 <p align="center"> <img src="img/InfraAsPicture.png")</p><br>  
 
-В качестве backend для terraform использовал S3 bucket в YandexCloud.
-
 # 3. Установка Nginx и LetsEncrypt  
   
 ## Роль для установки Nginx и LetsEncrypt называется install-nginxrevproxy  
@@ -177,6 +176,10 @@ alias terprov="ansible-playbook -i /home/yolo/PycharmProjects/diplom-netology/sr
 Ведомый сервер  
 <p align="center"> <img src="img/mysqldbSlave.png")</p><br>   
 
+## Роль для установки reverse proxy для Mysql Cluster. [install-mysql-service](src/ansible/roles/install-nginx-tcpproxy/README.md)
+Роль как и дополнительный сервер необходимо реализовать, в противном случае при падении сервера прописанного в конфигурационном файле wp-config.php упадет и сайт, т.к. в качестве точки входа в базу данных указа Master-server т.к. только он доступен на запись.
+Описанная роль создает обратный прокси для tcp-соединений, и следит за состоянием хостов backend. В случае падения основного сервера все запросы перейду на вторичный. Который в свою очередь, после падения основного, станет главным.
+В процессе работы роли, устанавливается специальный пакет Nginx-mod-stream скомпилированный с дополнительным пакетом поддержки tcp-потоков. Конфигурационный файл копируется из шаблона.
 # 5. Установка WordPress
 ## Роль для установки и настройки Wordpress [install-wordpress](src/ansible/roles/install-wordpress/README.md)
 В качестве WEB-сервера для разнообразия выбрал Apache(в работе/production думаю так делать не стоит, надо использовать то что ВСЕ умеют лучше всего устанавливать и поддерживать. Зоопарк из используемых сервисов должен быть контроллируемый, а его размер необходимый и достаточный).
@@ -280,16 +283,4 @@ tag-job:
 Дополнительно передаем параметры доставка оповещений о сработке алертов.
 <p align="center"> <img src="img/AlertManager.png")</p><br>  
 
-
-
-Что необходимо для сдачи задания?
-
-Репозиторий со всеми Terraform манифестами и готовность продемонстрировать создание всех ресурсов с нуля.
-Репозиторий со всеми Ansible ролями и готовность продемонстрировать установку всех сервисов с нуля.
-Скриншоты веб-интерфейсов всех сервисов работающих по HTTPS на вашем доменном имени.
-https://www.you.domain (WordPress)
-https://gitlab.you.domain (Gitlab)
-https://grafana.you.domain (Grafana)
-https://prometheus.you.domain (Prometheus)
-https://alertmanager.you.domain (Alert Manager)
-Все репозитории рекомендуется хранить на одном из ресурсов (github.com или gitlab.com).
+Добавить фото сервисов с корректным https

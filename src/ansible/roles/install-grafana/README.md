@@ -6,7 +6,8 @@
 ## Role Variables
 
 Основные переменные описаны ниже, полный список переменных представлен в директории [defaults/main.yml](defaults/main.yml).
-
+ Название переменной | Значение по-умолчанию       | Описание                                     |
+|---------------------|-----------------------------|----------------------------------------------|
 | `grafana_version` | latest | Версия Grafana для развертывания |
 | `grafana_instance` | {{ ansible_fqdn \| default(ansible_host) \| default(inventory_hostname) }} | Название сервиса |
 | `grafana_logs_dir` | /var/log/grafana | Путь до директории с логами |
