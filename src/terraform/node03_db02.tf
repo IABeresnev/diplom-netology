@@ -1,12 +1,12 @@
 resource "yandex_compute_instance" "db02" {
-  name                      = "db02"
+  name                      = "db02-${terraform.workspace}"
   zone                      = "ru-central1-a"
   hostname                  = "db02.itili4.ru"
   allow_stopping_for_update = true
 
   resources {
-    cores  = 4
-    memory = 4
+    cores  = "${terraform.workspace == "prod" ? 4 : 2}"
+    memory = "${terraform.workspace == "prod" ? 4 : 2}"
   }
 
   boot_disk {
@@ -29,6 +29,6 @@ resource "yandex_compute_instance" "db02" {
   }
 
   scheduling_policy {
-    preemptible = true
+    preemptible = "${terraform.workspace == "prod" ? false : true}"
   }
 }

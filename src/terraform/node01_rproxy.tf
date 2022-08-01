@@ -1,12 +1,12 @@
 resource "yandex_compute_instance" "rproxy" {
-  name                      = "rproxy"
+  name                      = "rproxy-${terraform.workspace}"
   zone                      = "ru-central1-a"
   hostname                  = "itili4.ru"
   allow_stopping_for_update = true
 
   resources {
-    cores  = 2
-    memory = 2
+    cores  = "${terraform.workspace == "prod" ? 2 : 1}"
+    memory = "${terraform.workspace == "prod" ? 2 : 1}"
   }
 
   boot_disk {
@@ -29,7 +29,7 @@ resource "yandex_compute_instance" "rproxy" {
   }
 
   scheduling_policy {
-    preemptible = true
+    preemptible = "${terraform.workspace == "prod" ? false : true}"
   }
 }
 

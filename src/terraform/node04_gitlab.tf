@@ -1,12 +1,12 @@
 resource "yandex_compute_instance" "gitlab" {
-  name                      = "gitlab"
+  name                      = "gitlab-${terraform.workspace}"
   zone                      = "ru-central1-b"
   hostname                  = "gitlab.itili4.ru"
   allow_stopping_for_update = true
 
   resources {
-    cores  = 4
-    memory = 8
+    cores  = "${terraform.workspace == "prod" ? 4 : 2}"
+    memory = "${terraform.workspace == "prod" ? 8 : 4}"
   }
 
   boot_disk {
@@ -29,6 +29,6 @@ resource "yandex_compute_instance" "gitlab" {
   }
 
   scheduling_policy {
-    preemptible = true
+    preemptible = "${terraform.workspace == "prod" ? false : true}"
   }
 }

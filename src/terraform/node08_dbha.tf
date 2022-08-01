@@ -1,12 +1,12 @@
 resource "yandex_compute_instance" "dbha" {
-  name                      = "dbha"
+  name                      = "dbha-${terraform.workspace}"
   zone                      = "ru-central1-a"
   hostname                  = "dbha.itili4.ru"
   allow_stopping_for_update = true
 
   resources {
-    cores  = 2
-    memory = 2
+    cores  = "${terraform.workspace == "prod" ? 2 : 1}"
+    memory = "${terraform.workspace == "prod" ? 2 : 1}"
   }
 
   boot_disk {
@@ -29,6 +29,6 @@ resource "yandex_compute_instance" "dbha" {
   }
 
   scheduling_policy {
-    preemptible = true
+    preemptible = "${terraform.workspace == "prod" ? false : true}"
   }
 }

@@ -1,5 +1,5 @@
 resource "yandex_compute_instance" "grunner" {
-  name                      = "grunner"
+  name                      = "grunner-${terraform.workspace}"
   zone                      = "ru-central1-b"
   hostname                  = "grunner.itili4.ru"
   allow_stopping_for_update = true
@@ -29,6 +29,6 @@ resource "yandex_compute_instance" "grunner" {
   }
 
   scheduling_policy {
-    preemptible = true
+    preemptible = "${terraform.workspace == "prod" ? false : true}"
   }
 }

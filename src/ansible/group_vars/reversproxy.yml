@@ -80,4 +80,5 @@ nginx_revproxy_de_activate_sites: false
 
 privoxy_listen_address: "192.168.101.11"
 
+addsoft: "no"
 dole: "no"
