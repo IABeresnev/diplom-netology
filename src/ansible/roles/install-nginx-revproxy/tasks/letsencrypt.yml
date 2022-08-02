@@ -1,5 +1,4 @@
 ---
-- name: Gimme CERTS
 # Устанавливаем пакеты для получения сертификатов
 - name: Install certbot-auto
   get_url:
@@ -25,7 +24,7 @@
   check_mode: false
   register: active
 
-# Запрашиваем сертификаты
+# Запрашиваем сертификаты. Для получения тестовых сертифкатов дописат в конец команды --test-cert
 - name: Generate certs (first time)
   command: |
     certbot{{ '-auto' if nginx_revproxy_certbot_auto else '' }} certonly
@@ -33,7 +32,7 @@
     -d {{ item.value.domains | join(' -d ') }}
     --email {{ item.value.letsencrypt_email }}
     --non-interactive --cert-name {{ item.key }}
-    --agree-tos creates=/etc/letsencrypt/live/{{ item.key }}/fullchain.pem --test-cert
+    --agree-tos creates=/etc/letsencrypt/live/{{ item.key }}/fullchain.pem
   with_dict: "{{ nginx_revproxy_sites }}"
   when: item.value.letsencrypt | default(False)
 

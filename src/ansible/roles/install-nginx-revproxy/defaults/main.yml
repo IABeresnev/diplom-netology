@@ -17,8 +17,4 @@ nginx_revproxy_sites:                                         # Список д�
 
 nginx_revproxy_certbot_auto: false
 
-# Remove WebRoot Sites
-#nginx_revproxy_remove_webroot_sites: true
-
-# De-activate Sites
-#nginx_revproxy_de_activate_sites: true
+dole: "nope" # Если не равно get, то получение сертификатов с LE не запустится.
