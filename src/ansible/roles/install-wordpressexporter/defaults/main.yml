@@ -1,0 +1,7 @@
+---
+# defaults file for install-wordpressexporter
+WP_DB_USER: "wordpress"
+WP_DB_PASS: "wordpress"
+WP_DB_HOST: "dbha.itili4.ru"
+WP_DB_NAME: "wordpress"
+WP_DB_PREFIX: "wp_"

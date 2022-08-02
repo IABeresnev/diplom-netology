@@ -1,0 +1,56 @@
+---
+- name: download Go language SDK
+  get_url:
+    url: 'https://dl.google.com/go/go1.19.linux-amd64.tar.gz'
+    dest: '/tmp/'
+    force: no
+    mode: 'u=rw,go=r'
+
+- name: create Go language SDK installation directory
+  file:
+    state: directory
+    owner: root
+    group: root
+    mode: 'u=rwx,go=rx'
+    dest: '/usr/local/go'
+
+- name: install Go language SDK
+  unarchive:
+    src: '/tmp'
+    remote_src: yes
+    extra_opts: '--strip-components=1'
+    dest: '/usr/local/go'
+    owner: root
+    group: root
+    creates: '/usr/local/go/bin'
+
+# Set Go language SDK environment variables
+- name: make sure /etc/profile.d exists
+  file:
+    path: /etc/profile.d
+    state: directory
+    owner: root
+    group: root
+    mode: 'u=rwx,go=rx'
+
+- name: export Go language SDK environment variables
+  template:
+    src: golang.sh.j2
+    dest: /etc/profile.d/golang.sh
+    owner: root
+    group: root
+    mode: 'u=rw,go=r'
+
+- name: Copy go file
+  copy:
+    src: "{{ item }}"
+    dest: /home/centos/
+  loop:
+    - wordpress_exporter.go
+    - go.mod
+    - go.sum
+
+- name: Run beresnevia/wpexporter
+  shell: cd /home/centos; /usr/local/go/bin/go run wordpress_exporter.go -host={{ WP_DB_HOST }} -port={{ WP_DB_PORT }} -user={{ WP_DB_USER }} -db={{ WP_DB_NAME }} -tableprefix={{ WP_DB_PREFIX }} -pass={{ WP_DB_PASS }} >/dev/null 2>&1 &
+  args:
+    executable: /bin/bash

@@ -7,7 +7,7 @@ gpaservers
 dbha
 
 [reversproxy]
-rproxy.itili4.ru ansible_host=62.84.126.148
+rproxy.itili4.ru ansible_host=51.250.73.167
 [frontend]
 wordpress.itili4.ru ansible_host=192.168.101.10
 [dbservers]
@@ -23,7 +23,7 @@ gpa.itili4.ru ansible_host=192.168.102.16
 dbha.itili4.ru ansible_host=192.168.101.17
 
 [nodes:vars]
-ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -W %h:%p -q centos@62.84.126.148"'
+ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand="ssh -W %h:%p -q centos@51.250.73.167"'
 ansible_ssh_user=centos
   
 [reversproxy:vars]

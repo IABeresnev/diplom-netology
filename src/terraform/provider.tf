@@ -16,6 +16,7 @@ terraform {
 
     skip_region_validation      = true
     skip_credentials_validation = true
+
   }
 }
 

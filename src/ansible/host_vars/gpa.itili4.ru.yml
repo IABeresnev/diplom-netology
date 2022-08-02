@@ -1,32 +1,51 @@
 prometheus_version: latest
 prometheus_web_external_url: 'http://prometheus.itili4.ru:9090'
-prometheus_targets: 
-  node:
-    - targets:
+# prometheus_targets: 
+#   node:
+#     - targets:
+#         - itili4.ru:9100
+#       labels:
+#         env: Proxy
+#     - targets:
+#         - wordpress.itili4.ru:9100
+#       labels:
+#         env: Frontend
+#     - targets:
+#         - db01.itili4.ru:9100
+#         - db02.itili4.ru:9100
+#       labels:
+#         env: DB Servers
+#     - targets:
+#         - gitlab.itili4.ru:9100
+#       labels:
+#         env: GitlabServer
+#     - targets:
+#         - grunner.itili4.ru:9100
+#       labels:
+#         env: GitlabRunner
+#     - targets:
+#         - dbha.itili4.ru:9100
+#       labels:
+#         env: MysqlReversProxy
+
+prometheus_scrape_configs:
+  - job_name: "wordpress"
+    metrics_path: "/metrics"
+    static_configs:
+      - targets:
+          - wordpress.itili4.ru:8888
+
+  - job_name: "node_exporter"
+    metrics_path: "/metrics"
+    static_configs:
+      - targets:
         - itili4.ru:9100
-      labels:
-        env: Proxy
-    - targets:
         - wordpress.itili4.ru:9100
-      labels:
-        env: Frontend
-    - targets:
         - db01.itili4.ru:9100
         - db02.itili4.ru:9100
-      labels:
-        env: DB Servers
-    - targets:
         - gitlab.itili4.ru:9100
-      labels:
-        env: GitlabServer
-    - targets:
         - grunner.itili4.ru:9100
-      labels:
-        env: GitlabRunner
-    - targets:
         - dbha.itili4.ru:9100
-      labels:
-        env: MysqlReversProxy
         
 prometheus_alertmanager_config:
   - static_configs:
