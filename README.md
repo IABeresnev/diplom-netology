@@ -283,7 +283,7 @@ tag-job:
 # Реализовал сбор метрик с сайта Wordpress  
 ## Роль для сбора метрик [install-wordpressexporter](src/ansible/roles/install-wordpressexporter/README.md)  
 
-Экспортер метрик написан на Golang, за метриками ходит прямо в базу MySQL к базу данных сайта.  
+Экспортер метрик написан на Golang, за метриками ходит прямо в MySQL в базу данных сайта.  
 Вытаскивает данные по количестову зарегистрированных пользователей, количество постов, количество комментариев.  
 Сбор метрик можно расширить при необходимости, дописав [скрипт](src/ansible/roles/install-wordpressexporter/files/wordpress_exporter.go) на Go.  
 
